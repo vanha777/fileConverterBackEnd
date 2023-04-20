@@ -1,7 +1,5 @@
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
-aws.config.update({accessKeyId: 'AKIA6COXGD6KHVUZ2BBB', secretAccessKey: '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'});
-aws.config.update({region: 'ap-southeast-2'});
 const S3_BUCKET = process.env.S3_BUCKET;
 const handleGetKey = (fileName, fileType) => {
     const s3Params = {
