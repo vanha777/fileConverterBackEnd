@@ -8,15 +8,12 @@ const knex = require('knex');
 const multer = require("multer");
 const fs = require("fs");
 const convert = require('./controllers/converter.js');
+const getObjects = require('./controllers/getObjects.js');
 
 
-//amazon s3 credential-enviroment set up 
-const aws = require('aws-sdk');
-const s3 = new aws.S3();
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.update({ region: 'ap-southeast-2' });
+
 require('dotenv').config();
-//end.
+
 
 
 
@@ -101,6 +98,10 @@ app.post("/upLoad", upload.array("files"), (req, res, next) => {
 
 
 });
+
+// Get All Objects List
+app.get('/files', (req, res) => { getObjects.handleGetObjects(req, res) });
+
 
 
 //app.post('/signin', signin.handleSignin(bcrypt, dataBase));
