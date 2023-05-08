@@ -4,22 +4,12 @@ const cors = require('cors');
 const knex = require('knex');
 //const register = require('./controllers/register.js');
 //const getKey = require('./controllers/handleGetKey.js');
-
 const multer = require("multer");
 const fs = require("fs");
 const convert = require('./controllers/converter.js');
 const getObjects = require('./controllers/getObjects.js');
-
-
-
+const deleteObject = require('./controllers/deleteObject.js');
 require('dotenv').config();
-
-
-
-
-
-
-
 
 
 const app = express();
@@ -28,9 +18,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-app.get('/', (req, res) => { res.json('dataBase') });
+app.get('/', (req, res) => { res.json('Connected') });
 
-//get signature for front-end to sign aws-s3 upload
+//get pre-signed URL for front-end to perform aws-s3 functions - not in uses
 app.post('/getSignedRequest', (req, res) => {
   const request = req.body.file[0];
   console.log(request)
@@ -60,14 +50,15 @@ app.post('/getSignedRequest', (req, res) => {
   })).then((result)=>console.log(result))*/}
 
 });
+//end.
 
-
+//not in use
 app.get('/pdfConverter', (req, res) => { convert.handleConvert(req, res) });
+// end.
 
 
-
-
-//confirgue multer() to read input files
+//Upload convert and return aws-s3 files locations
+        //confirgue multer() to read input files
 const storage = multer.memoryStorage({
   /*destination: function (req, file, cb) {
     cb(null, 'public/upload')
@@ -80,9 +71,7 @@ const storage = multer.memoryStorage({
 const upload = multer({
   storage: storage
 });
-//end.
-
-//convert file from front-end and return PDF files on amazon s3
+        //convert file from front-end and return PDF files on amazon s3
 app.post("/upLoad", upload.array("files"), (req, res, next) => {
   //if server crashed => failed to read input files
  
@@ -98,10 +87,15 @@ app.post("/upLoad", upload.array("files"), (req, res, next) => {
 
 
 });
+//end.
 
 // Get All Objects List
 app.get('/files', (req, res) => { getObjects.handleGetObjects(req, res) });
+//end. 
 
+// Delete the Selected Objects List
+app.post('/filesDelete', (req, res) => {deleteObject.handleDeleteObjects(req, res) });
+//end. 
 
 
 //app.post('/signin', signin.handleSignin(bcrypt, dataBase));

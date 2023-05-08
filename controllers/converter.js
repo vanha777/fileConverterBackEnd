@@ -18,11 +18,13 @@ const handleConvert = (req, res, files) => {
     })
     console.log(arrayOfFile);
 
+    // to add a new field to a FormData object.
     formData.append('instructions', JSON.stringify({
         parts:arrayOfFile
 
     }))
 
+    // append actual files and data to formData
     files.map((files)=>formData.append(files.originalname, files.buffer, {
         filename: files.originalname,
         contentType: files.mimetype
@@ -50,7 +52,7 @@ const handleConvert = (req, res, files) => {
                     Bucket: S3_BUCKET,
                     Key: `result${Date.now()}.pdf`,
                     Body: response.data,
-                    ACL: 'public-read',
+                    ACL: 'public-read-write',
                     ContentType: 'application/pdf'
                 }
                 s3.upload(s3Params, (err, data) => {
